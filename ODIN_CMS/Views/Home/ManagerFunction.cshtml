@@ -1,0 +1,138 @@
+﻿@using DataAccess.Models
+@using Utils
+@using ODIN_CMS.Controllers
+@{
+    ViewData["Title"] = "ManagerFunction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var listGroup = ((List<Groups>)ViewBag.ListGroups);
+}
+@if (IdentityHelper.GroupID <= 3)
+{
+    <section class="content">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Danh Sách Chức Năng</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4 mb-1">
+                            <div class="form-group">
+                                <label class="control-label"><i class="fa fa-flag"></i>Nhóm tài khoản</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select class="form-control select2" id="ddlGroup">
+                                        <option value="-1">--Chọn nhóm quyền--</option>
+                                        @if (listGroup != null && listGroup.Count > 0)
+                                        {
+                                            foreach (var item in listGroup)
+                                            {
+                                                <option value="@item.GroupID">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="box">
+                @*<div class="box-header with-border">
+                        <h3 class="box-title">Danh sách người dùng</h3>
+                    </div>*@
+                <div class="box-body">
+                    <div class="form-horizontal" id="TableListFunctions">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            GetList();
+            $("#ddlGroup").change(function () {
+                GetList();
+            });
+
+        });
+
+        function GetList() {
+            utils.Loading();
+            parameters = {
+                groupId: $('#ddlGroup :selected').val()
+            };
+            var urlRequestAns = UrlRoot + "Home/ListGroupFunctions";
+            $.ajax({
+                type: 'GET',
+                url: urlRequestAns,
+                data: parameters,
+                success: function (data) {
+                    $("#TableListFunctions").html(data);
+                    utils.unLoading();
+                },
+                error: function () {
+                    utils.unLoading();
+                }
+            });
+        }
+        function ViewFunctionData(id) {
+            utils.Loading();
+            $.ajax({
+                type: 'GET',
+                url: UrlRoot + "Home/GetFunctionInfo",
+                data: {
+                    'id': id
+                },
+                dataType: 'html',
+                success: function (data) {
+                    utils.unLoading();
+                    $("#PopupThongBao").html(data).modal('show');
+                }
+            });
+        }
+
+        function RemoveMenu(id) {
+            var IsDelete = '@ViewBag.GroupID';
+            if (parseInt(IsDelete) > 2) {
+                bootbox.alert("Bạn không có quyền xóa chức năng");
+                return;
+            }
+            bootbox.confirm("Bạn chắc chắn muốn xóa chức năng này ??? ", function (result) {
+                if (result == true) {
+                    utils.Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: UrlRoot + "Home/DeleteFunction",
+                        data: {
+                            'id': id
+                        },
+                        success: function (data) {
+                            utils.unLoading();
+                            if (data.responseCode >= 0) {
+                                bootbox.alert(data.responseDesc);
+                                setTimeout(function () { location.reload(); }, 2000);
+                            }
+                            else {
+                                bootbox.alert(data.responseDesc);
+                                return;
+                            }
+                        }
+                    });
+                }
+            })
+        }
+    </script>
+}
+else
+{
+    <h2 style="color:red">ErrorPermission</h2>
+
+    <h4>Bạn không có quyền truy cập . Xin hãy liên hệ Admin để được cấp quyền vào hệ thống CMS</h4>
+
+}
+
+

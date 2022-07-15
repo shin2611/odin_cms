@@ -1,0 +1,354 @@
+﻿@using DataAccess.Models
+@{
+    ViewData["Title"] = "ManagerUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var listGroup = ((List<Groups>)ViewBag.ListGroup);
+    var listMerchant = ((List<Merchant>)ViewBag.ListMerchant);
+}
+
+
+<section class="content">
+    <div class="col-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Tìm Kiếm Danh Sách Người Dùng</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-4 mb-1">
+                        <div class="form-group">
+                            <label class="control-label"><i class="fa fa-flag"></i>Trạng thái</label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select class="form-control select2" id="ddlActive">
+                                    <option value="-1">Lấy tất cả</option>
+                                    <option value="1">Hoạt Động</option>
+                                    <option value="0">Không Hoạt Động</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-1">
+                        <div class="form-group">
+                            <label class="control-label"><i class="fa fa-flag"></i>Nhóm tài khoản</label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select class="form-control select2" id="ddlGroup">
+                                    <option value="-1">Lấy tất cả</option>
+                                    @if (listGroup != null && listGroup.Count > 0)
+                                    {
+                                        foreach (var item in listGroup)
+                                        {
+                                            <option value="@item.GroupID">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @if (IdentityHelper.MerchantID == 1)
+                    {
+                        <div class="col-lg-4 mb-1">
+                            <div class="form-group">
+                                <label class="control-label"><i class="fa fa-flag"></i>Cơ sở</label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select class="form-control select2" id="ddlMerchant">
+                                        <option value="-1">Lấy tất cả</option>
+                                        @if (listMerchant != null && listMerchant.Count > 0)
+                                        {
+                                            foreach (var item in listMerchant)
+                                            {
+                                                <option value="@item.MerchantID">@item.MerchantName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        @if ((int)ViewBag.GroupID <= 2)
+                        {<button type="button" id="btnCreate" class="btn btn-success"><i class="mdi mdi-account-plus"></i> Thêm User</button>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Danh sách người dùng</h3>
+            </div>
+            <div class="box-body">
+                <div class="table-responsive" id="UsersPartial">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            GetList();
+            $("#ddlActive").change(function () {
+                GetList();
+            });
+            $("#ddlGroup").change(function () {
+                GetList();
+            });
+            $("#ddlMerchant").change(function () {
+                GetList();
+            });
+            $("#btnCreate").click(function () {
+                ViewUserData(0);
+            });
+            //let table1 = document.querySelector('#table1');
+            //let dataTable = new simpleDatatables.DataTable(table1);
+
+            $('#defaultForm').bootstrapValidator({
+                message: 'This value is not valid',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    username: {
+                        message: 'The username is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'Username không được bỏ trống'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9\.]+$/,
+                                message: 'Username gồm ký tự alphabeta hoặc số'
+                            },
+                            stringLength: {
+                                min: 3,
+                                max: 30,
+                                message: 'Username nhỏ nhất 3 ký tự và nhiều nhất 30 ký tự'
+                            },
+                            different: {
+                                field: 'Password',
+                                message: 'Username và password phải khác nhau'
+                            }
+                        }
+                    },
+                    fullname: {
+                        message: 'Bạn chưa nhập họ tên.',
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập họ tên'
+                            },
+                            stringLength: {
+                                min: 3,
+                                max: 50,
+                                message: 'họ tên dài từ 3 đến 50 ký tự'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỰÝỲỶỸỴ\.\-\_\s]+$/,
+                                message: 'Họ tên không được nhập các ký tự đặc biệt'
+                            },
+                        }
+                    },
+                    Email: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Email không được bỏ trống'
+                            },
+                            emailAddress: {
+                                message: 'Bạn đã nhập sai định dạng địa chỉ email'
+                            }
+                        }
+                    },
+                    Password: {
+                        validators: {
+                            stringLength: {
+                                min: 6,
+                                max: 30,
+                                message: 'Password phải từ 6 đến 30 ký tự'
+                            },
+                            identical: {
+                                field: 'ConfirmPassword',
+                                message: 'Password và confirmPassword không trùng khớp'
+                            },
+                            different: {
+                                field: 'username',
+                                message: 'Password không thể trùng với Username'
+                            }
+                        }
+                    },
+                    ConfirmPassword: {
+                        validators: {
+                            identical: {
+                                field: 'Password',
+                                message: 'Password và confirmPassword không trùng khớp'
+                            },
+                            different: {
+                                field: 'username',
+                                message: 'Password không thể trùng với Username'
+                            }
+                        }
+                    }
+                }
+            })
+                .on('success.form.bv', function (e) {
+                    // Prevent submit form
+                    e.preventDefault();
+
+                    var $form = $(e.target),
+                        validator = $form.data('bootstrapValidator');
+                    SaveData();
+                })
+                .on('error.form.bv', function (e) {
+                    // Active the panel element containing the first invalid element
+                    e.preventDefault();
+                    var $form = $(e.target),
+                        validator = $form.data('bootstrapValidator');
+                    swal("Có một vài lỗi trong khung nhập liệu dưới đây ! kiểm tra lại");
+                });
+
+        });
+        function GetList() {
+            parameters = {
+                isActive: $('#ddlActive :selected').val(),
+                groupId: $('#ddlGroup :selected').val(),
+                merchantId: $('#ddlMerchant :selected').val()
+            };
+            utils.Loading();
+            var urlRequestAns = UrlRoot + "Home/ListUsers";
+            $.ajax({
+                type: 'GET',
+                url: urlRequestAns,
+                data: parameters,
+                success: function (data) {
+                    $("#UsersPartial").html(data);
+                    utils.unLoading();
+                },
+                error: function () {
+                    utils.unLoading();
+                }
+            });
+    };
+
+    function ViewUserData(id) {
+        utils.Loading();
+        $.ajax({
+            type: 'GET',
+            url: UrlRoot + "Home/GetUserInfo",
+            data: {
+                'id': id
+            },
+            dataType: 'html',
+            success: function (data) {
+                utils.unLoading();
+                $("#PopupThongBao").html(data).modal('show');
+            }
+        });
+    }
+    //Save Data
+    function SaveData() {
+        var param = {
+            'UserID': $("#txtUserID").val(),
+            'Username': $("#txtUserName").val(),
+            'FullName': $("#txtFullName").val(),
+            'Email': $("#txtEmail").val(),
+            'Password': $("#txtpassword").val(),
+            'Status': $("#cbxIsActive").is(":checked") ? true : false,
+            'GroupID': $('#ddlGroupInfo').val(),
+            'MerchantID': $('#ddlMerchantInfo').val(),
+        };
+        utils.Loading();
+        $.ajax({
+            type: 'POST',
+            url: UrlRoot + "Home/SaveDataUser",
+            data: param,
+            async: true,
+            success: function (data) {
+                debugger;
+                utils.unLoading();
+                if (data.responseCode >= 0) {
+                    $('#PopupThongBao').modal('hide');
+                    bootbox.alert(data.responseDesc);
+                    setTimeout(function () { GetList(); }, 2500);
+                }
+                else {
+                    bootbox.alert(data.responseDesc);
+                }
+            }
+        });
+    };
+
+    //Update Status User
+    function UpdateStatusUser(id, status) {
+        var type = "Vô hiệu hóa";
+        if (status == 0) {
+            type = "Kích hoạt";
+        }
+        bootbox.confirm("Bạn muốn " + type + " Tài khoản này ?", function (conf) {
+            if (conf == 1) {
+                var urlUpstatus = UrlRoot + "Home/UpdateActiveUser";
+                utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: urlUpstatus,
+                    data: { id: id },
+                    success: function (data) {
+                        utils.unLoading();
+                        if (data.ResponseCode >= 0) {
+                            bootbox.alert(data.ResponseDesc);
+                            setTimeout(function () {
+                                GetList();
+                            }, 1000);
+                        }
+                        else {
+                            bootbox.alert(data.ResponseDesc);
+                            return;
+                        }
+                    },
+                    error: function () {
+                        utils.UnLoading();
+                    }
+                });
+            }
+            return;
+        });
+    };
+      function DeleteData(id) {
+            var IsDelete = '@ViewBag.GroupID';
+            if (parseInt(IsDelete) > 2) {
+            bootbox.alert("Bạn không có quyền xóa chức năng");
+            return;
+        }
+        bootbox.confirm("Bạn chắc chắn muốn xóa tài khoản này ??? ", function (result) {
+            if (result == true) {
+                utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: UrlRoot + "Home/DeleteUser",
+                    data: {
+                        'id': id
+                    },
+                    success: function (data) {
+                        debugger;
+                        utils.unLoading();
+                        if (data.responseCode >= 0) {
+                            bootbox.alert(data.responseDesc);
+                            GetList();
+                        }
+                        else {
+                            bootbox.alert(data.responseDesc);
+                            return;
+                        }
+                    }
+                });
+            }
+        });
+
+}
+</script>
+@*<script src="~/js/View/ManagerUser.js"></script>*@
+

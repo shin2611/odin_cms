@@ -1,0 +1,129 @@
+﻿@using DataAccess.Models
+@using ODIN_CMS.Models
+@model UserInfoViewModel
+
+@{
+    var UserInfo = Model.Users;
+    var Groups = Model.ListGroups;
+    var MerchantList = Model.ListMerchant;
+}
+@if (IdentityHelper.GroupID <= 3)
+{
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (UserInfo != null && UserInfo.UserID > 0)
+                {
+                    <h4 class="modal-title" id="myModalLabel33">Cập nhật user </h4>
+                }
+                else
+                {
+                    <h4 class="modal-title" id="myModalLabel33">Thêm mới user </h4>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="box">
+                    <form class="form form-horizontal" id="defaultForm" method="post">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label for="txtUserName" class="col-sm-2 col-form-label">Username</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtUserName" maxlength="30" name="username" value="@UserInfo.Username" class="form-control" placeholder="Nhập tên Tài Khoản" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtEmail" name="Email" maxlength="150" value="@UserInfo.Email" class="form-control" placeholder="Nhập địa chỉ Email" data-rule-required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtFullName" class="col-sm-2 col-form-label">Fullname</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtFullName" name="fullname" maxlength="50" value="@UserInfo.FullName" class="form-control" placeholder="Nhập họ tên" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtpassword" class="col-sm-2 col-form-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" id="txtpassword" name="Password" maxlength="30" class="form-control" placeholder="Nhập mật khẩu" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtConfirmPass" class="col-sm-2 col-form-label">Rewrite Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" id="txtConfirmPass" name="ConfirmPassword" maxlength="30" class="form-control" placeholder="nhập lại mật khẩu" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtConfirmPass" class="col-sm-2 col-form-label">Trạng thái</label>
+                                        <div class="col-sm-10">
+                                            <div class="checkbox">
+                                                @if (UserInfo.Status == true)
+                                                {<input type="checkbox" id="cbxIsActive" checked="checked" style="opacity:1;left:5px;" />}
+                                                else
+                                                {<input type="checkbox" id="cbxIsActive" style="opacity:1;left:5px;" />}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtConfirmPass" class="col-sm-2 col-form-label">Nhóm tài khoản :</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select form-control select2" id="ddlGroupInfo">
+                                                @if (Groups != null && Groups.Count > 0)
+                                                {
+                                                    if (UserInfo.UserID > 0)
+                                                    {
+                                                        <option value="@ViewBag.GroupID" selected="selected">@ViewBag.GroupName</option>
+                                                    }
+                                                    foreach (var item in Groups)
+                                                    {
+                                                        <option value="@item.GroupID">@item.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @if (IdentityHelper.MerchantID == 1)
+                                    {
+                                        <div class="form-group row">
+                                            <label for="txtConfirmPass" class="col-sm-2 col-form-label">Chọn cơ sở :</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-select form-control select2" id="ddlMerchantInfo">
+                                                    @if (MerchantList != null && MerchantList.Count > 0)
+                                                    {
+                                                        if (UserInfo.UserID > 0)
+                                                        {
+                                                            <option value="@ViewBag.MerchantID" selected="selected">@ViewBag.MerchantName</option>
+                                                        }
+                                                        foreach (var item in MerchantList)
+                                                        {
+                                                            <option value="@item.MerchantID">@item.MerchantName</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger text-left" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="SaveData();">Save changes</button>
+                        </div>
+                        <input type="hidden" value="@UserInfo.UserID" id="txtUserID" />
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+}

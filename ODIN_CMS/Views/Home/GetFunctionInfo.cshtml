@@ -1,0 +1,215 @@
+﻿@using DataAccess.Models
+@using ODIN_CMS.Models
+@model ModelFunctionDetail
+
+@{
+    var FunctionInfo = Model.FunctionDetail;
+    var ListFunction = Model.ListFunction;
+}
+@if (IdentityHelper.GroupID <= 3)
+{
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (FunctionInfo != null && FunctionInfo.FunctionID > 0)
+                {
+                    <h4 class="modal-title" id="myModalLabel33">Cập nhật chức năng </h4>
+                }
+                else
+                {
+                    <h4 class="modal-title" id="myModalLabel33">Thêm mới chức năng </h4>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="box">
+                    <form class="form form-horizontal" id="defaultForm" method="post">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <label for="txtFunctionName" class="col-sm-2 col-form-label">Tên chức năng :</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtFunctionName" maxlength="50" name="functionname" value="@FunctionInfo.FunctionName" class="form-control" placeholder="Nhập tên chức năng" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtActionName" class="col-sm-2 col-form-label">Controller Name :</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtActionName" name="ActionName" maxlength="50" value="@FunctionInfo.ActionName" class="form-control" placeholder="Nhập action name" data-rule-required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="ddlFunctionInfo" class="col-sm-2 col-form-label">Chọn chức năng cha :</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select form-control select2" id="ddlFunctionInfo" name="FatherFunction">
+                                                <option value="0">Chọn chức năng</option>
+                                                @if (ListFunction != null && ListFunction.Count > 0)
+                                                {
+                                                    foreach (var item in ListFunction)
+                                                    {
+                                                        if (item.FunctionID == FunctionInfo.ParentID)
+                                                        {
+                                                            <option value="@item.FunctionID" selected="selected">@item.FunctionName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.FunctionID">@item.FunctionName</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtFunctionUrl" class="col-sm-2 col-form-label">Đường dẫn  :</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtFunctionUrl" name="ControlUrl" maxlength="250" value="@FunctionInfo.Url" class="form-control" placeholder="Nhập đường dẫn chức năng" data-rule-required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtIconId" class="col-sm-2 col-form-label">Mã icon  :</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" id="txtIconId" name="txtIconId" maxlength="250" value="@FunctionInfo.CssIcon" class="form-control" placeholder="Nhập mã icon" data-rule-required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtConfirmPass" class="col-sm-2 col-form-label">Trạng thái</label>
+                                        <div class="col-sm-10">
+                                            <div class="checkbox">
+                                                @if (FunctionInfo.IsActive == true)
+                                                {<input type="checkbox" id="cbxIsActive" checked="checked" style="opacity:1;left:5px;" />}
+                                                else
+                                                {<input type="checkbox" id="cbxIsActive" style="opacity:1;left:5px;" />}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtConfirmPass" class="col-sm-2 col-form-label">Trạng thái hiển thị</label>
+                                        <div class="col-sm-10">
+                                            <div class="checkbox">
+                                                @if (FunctionInfo.IsDisplay == true)
+                                                {<input type="checkbox" id="cbxIsDisplay" checked="checked" style="opacity:1;left:5px;" />}
+                                                else
+                                                {<input type="checkbox" id="cbxIsDisplay" style="opacity:1;left:5px;" />}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger text-left" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="SaveData();">Save changes</button>
+                        </div>
+                        <input type="hidden" value="@FunctionInfo.FunctionID" id="txtFunctionID" />
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#defaultForm').bootstrapValidator({
+                message: 'This value is not valid',
+                excluded: ':disabled',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    functionname: {
+                        message: 'Bạn chưa nhập tên chức năng.',
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa nhập tên chức năng'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 30,
+                                message: 'Tên chức năng dài từ 6 đến 30 ký tự'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửựýỳỷỹỵÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬĐÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỰÝỲỶỸỴ\.\-\_{}()\[\]\s]+$/,
+                                message: 'Tên chức năng không được nhập các ký tự đặc biệt'
+                            },
+                        }
+                    },
+                    ActionName:{
+                        stringLength: {
+                            min: 3,
+                            max: 50,
+                            message: 'Tên Action dài từ 3 đến 50 ký tự'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9]+$/,
+                            message: 'Tên Action không được nhập các ký tự đặc biệt'
+                        },
+                    },
+                    FatherFunction: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bạn chưa chọn Chức năng cha'
+                            }
+                        }
+                    }
+                }
+            })
+            .on('error.form.bv', function (e) {
+                // Active the panel element containing the first invalid element
+                e.preventDefault();
+                var $form = $(e.target),
+                validator = $form.data('bootstrapValidator');
+                swal("Có một vài lỗi trong khung nhập liệu dưới đây ! kiểm tra lại");
+            })
+            .on('success.form.bv', function (e) {
+                // Prevent submit form
+                e.preventDefault();
+                var $form = $(e.target),
+                validator = $form.data('bootstrapValidator');
+                SaveData();
+            });
+
+            //Save Data
+            function SaveData() {
+                debugger;
+                var param = {
+                    FunctionID: $('#txtFunctionID').val(),
+                    FunctionName: $("#txtFunctionName").val(),
+                    ActionName: $("#txtActionName").val(),
+                    ParentID: $("#ddlFunctionInfo").val(),
+                    Url: $("#txtFunctionUrl").val(),
+                    IsActive: $("#cbxIsActive").is(":checked") ? true : false,
+                    IsDisplay: $("#cbxIsDisplay").is(":checked") ? true : false,
+                    CssIcon: $("#txtIconId").val()
+                };
+                utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: UrlRoot + "Home/SaveDataFunction",
+                    data: param,
+                    async: true,
+                    success: function (data) {
+                        utils.unLoading();
+                        if (data.responseCode >= 0) {
+                            $('#PopupThongBao').modal('hide');
+                            bootbox.alert(data.responseDesc);
+                            setTimeout(function () { location.reload(); }, 3000);
+                        }
+                        else {
+                            bootbox.alert(data.responseDesc);
+                        }
+                    }
+                });
+            };
+        });
+</script>

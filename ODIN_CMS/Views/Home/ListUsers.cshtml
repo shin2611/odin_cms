@@ -1,0 +1,75 @@
+﻿@using DataAccess.Models
+@using Utils
+@model List<Users>
+
+
+@if (IdentityHelper.GroupID <= 3)
+{
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th style="text-align:center;">Mã User</th>
+                <th style="text-align:center;">Nhóm tài khoản</th>
+                <th style="text-align:center;">Username</th>
+                <th style="text-align:center;">Email</th>
+                <th style="text-align:center;">Họ Tên</th>
+                <th style="text-align:center;">Cơ sở</th>
+                <th style="text-align:center;">Trạng Thái</th>
+                <th style="text-align:center;">Người Tạo</th>
+                <th style="text-align:center;">Chức Năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var obj in Model)
+                {
+                    <tr role="row">
+                        <td style="text-align:center;">@obj.UserID</td>
+                        <td style="text-align:center;">@obj.GroupName</td>
+                        <td style="text-align:center;">@obj.Username</td>
+                        <td style="text-align:center;">@obj.Email</td>
+                        <td style="text-align:center;">@obj.FullName</td>
+                        <td style="text-align:center;">@obj.MerchantName</td>
+                        <td style="text-align:center;">
+                            @if (obj.Status == true)
+                            {
+                                <label><i style="color:green" class="fa fa-check-circle"></i></label>
+                            }
+                            else
+                            {
+                                <label><i style="color:red" class="fa  fa-ban"></i></label>
+                            }
+                        </td>
+                        <td style="text-align:center;">@obj.CreatedUser</td>
+                        <td style="text-align:center">
+                            @if (obj.Status == false)
+                            {
+                                <a href="javascript:;" class="btn link-delete" data-trigger="hover" data-container="body" data-placement="left" data-toggle="popover" data-content="Bỏ Kích hoạt" onclick="UpdateStatusUser(@obj.UserID, 1);"><i class="fa fa-ban"></i></a>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" class="btn link-success" data-trigger="hover" data-container="body" data-placement="left" data-toggle="popover" data-content="Kích hoạt" onclick="UpdateStatusUser(@obj.UserID,0);"><i class="fa fa-check-circle"></i></a>
+                            }
+                            <a href="javascript:;" class="btn link-edit" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="Sửa" onclick="ViewUserData(@obj.UserID);"><i class="fa fa-edit"></i></a>
+                            @*<a href="@Html.Raw(Config.URL_ROOT)Home/GetGrantUserInfo/@obj.UserID" class="btn link-grant" data-trigger="hover" data-container="body" data-placement="top" data-toggle="popover" data-content="Phân Quyền"><i class="fa fa-cogs"></i></a>*@
+                            <a href="javascript:;" data-trigger="hover" data-container="body" data-placement="top" data-toggle="popover" data-content="Xóa" class="btn link-delete" onclick="DeleteData(@obj.UserID)"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 style="color:red">ErrorPermission</h2>
+
+    <h4>Bạn không có quyền truy cập . Xin hãy liên hệ Admin để được cấp quyền vào hệ thống CMS</h4>
+
+    <a href="@Html.Raw(ViewBag.UrlLogin)?act=out" style="color:#005bff; font-size:13px;text-decoration:underline">Logout</a>
+}
+
+

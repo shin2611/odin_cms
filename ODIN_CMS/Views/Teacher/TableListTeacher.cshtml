@@ -1,0 +1,81 @@
+﻿@using DataAccess.Models
+@using Utils
+@model List<Teacher>
+
+
+@if (IdentityHelper.GroupID <= 3)
+{
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th style="text-align:center;">Mã GV</th>
+                <th style="text-align:center;">Họ tên</th>
+                <th style="text-align:center;">Email</th>
+                <th style="text-align:center;">SĐT</th>
+                <th style="text-align:center;">CMND</th>
+                <th style="text-align:center;">Ngày cấp</th>
+                <th style="text-align:center;">Nơi cấp</th>
+                <th style="text-align:center;">Avatar</th>
+                <th style="text-align:center;">Trạng Thái</th>
+                <th style="text-align:center;">Cơ sở</th>
+                <th style="text-align:center;">Chức Năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var obj in Model)
+                {
+            <tr role="row">
+                <td style="text-align:center;">@obj.TeacherID</td>
+                <td style="text-align:center;">@obj.FullName</td>
+                <td style="text-align:center;">@obj.Email</td>
+                <td style="text-align:center;">@obj.PhoneNumber</td>
+                <td style="text-align:center;">@obj.CmndNum</td>
+                <td style="text-align:center;">@obj.DateBy.ToString("dd-MM-yyyy")</td>
+                <td style="text-align:center;">@obj.IssuedBy</td>
+                <td style="text-align:center;">
+                    <img src="@obj.ImagePath" style="width:100px;height:100px;"/>
+                </td>
+                <td style="text-align:center;">
+                    @if (obj.Status == 1)
+                    {
+                        <label><i style="color:green" class="fa fa-check-circle"></i></label>
+                    }
+                    else
+                    {
+                        <label><i style="color:red" class="fa  fa-ban"></i></label>
+                    }
+                </td>
+                <td style="text-align:center;">@obj.MerchantName</td>
+                <td style="text-align:center">
+                    @if (obj.Status == 1)
+                    {
+                        <a href="javascript:;" class="btn link-delete" data-trigger="hover" data-container="body" data-placement="left" data-toggle="popover" data-content="Bỏ Kích hoạt" onclick="UpdateStatusTeacher(@obj.TeacherID, 1);"><i class="fa fa-ban"></i></a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" class="btn link-success" data-trigger="hover" data-container="body" data-placement="left" data-toggle="popover" data-content="Kích hoạt" onclick="UpdateStatusUser(@obj.TeacherID, 0);"><i class="fa fa-check-circle"></i></a>
+                    }
+                    <a href="javascript:;" class="btn link-edit" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="Sửa" onclick="ViewUserData(@obj.TeacherID);"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:;" data-trigger="hover" data-container="body" data-placement="top" data-toggle="popover" data-content="Xóa" class="btn link-delete" onclick="DeleteData(@obj.TeacherID)"><i class="fa fa-trash-o"></i></a>
+                    <a href="javascript:;" class="btn link-success" data-trigger="hover" data-container="body" data-placement="top" data-toggle="popover" data-content="Chi tiết" onclick="ViewDataDetail(@obj.TeacherID)"><i class="fa fa-cogs"></i></a>
+                </td>
+            </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 style="color:red">ErrorPermission</h2>
+
+    <h4>Bạn không có quyền truy cập . Xin hãy liên hệ Admin để được cấp quyền vào hệ thống CMS</h4>
+
+    <a href="@Html.Raw(ViewBag.UrlLogin)?act=out" style="color:#005bff; font-size:13px;text-decoration:underline">Logout</a>
+}
+
+

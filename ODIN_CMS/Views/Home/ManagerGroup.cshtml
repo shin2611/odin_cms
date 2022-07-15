@@ -1,0 +1,146 @@
+﻿@using DataAccess.Models
+@using Utils
+@using ODIN_CMS.Controllers
+@model List<Groups>
+
+@{
+    ViewData["Title"] = "ManagerGroup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (IdentityHelper.GroupID <= 3)
+{
+    <section class="content">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Danh sách nhóm tài khoản</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button type="button" id="btnCreate" class="btn btn-success" onclick="ViewGroupData(0)"><i class="fa fa-user-plus"></i> Thêm nhóm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="table-responsive" id="UsersPartial">
+                        <table class="table table-striped" id="table1">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Nhóm tài khoản</th>
+                                    <th style="text-align:center;">Trạng Thái</th>
+                                    <th style="text-align:center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var obj in Model)
+                                    {
+                                        <tr role="row">
+                                            <td style="text-align:center;">@obj.Name</td>
+                                            <td style="text-align:center;">
+                                                @if (obj.Status == 1)
+                                                {
+                                                    <span class="btn btn-success rounded-pill">Hoạt động</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="btn btn-danger rounded-pill">Không hoạt động</span>
+                                                }
+                                            </td>
+                                            <td style="text-align:center">
+                                                <a href="javascript:;" class="btn btn-info" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="Sửa" onclick="ViewGroupData(@obj.GroupID);"><i class="fa fa-edit"></i>Cập nhật</a>
+                                                <a href="javascript:;" data-trigger="hover" data-container="body" data-placement="top" data-toggle="popover" data-content="Xóa" class="btn btn-danger" onclick="DeleteGroup(@obj.GroupID)"><i class="fa fa-trash-o"></i>Xóa</a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function ViewGroupData(id) {
+            utils.Loading();
+            $.ajax({
+                type: 'GET',
+                url: UrlRoot + "Home/GetGroupInfo",
+                data: {
+                    'id': id
+                },
+                success: function (data) {
+                    utils.unLoading();
+                    $("#PopupThongBao").html(data).modal('show');
+                }
+            });
+        };
+
+        function SaveGroup() {
+            var param = {
+                'GroupID': $("#txtGroupID").val(),
+                'Name': $("#txtGroupName").val()
+            };
+            utils.Loading();
+            $.ajax({
+                type: 'POST',
+                url: UrlRoot + "Home/UpdateGroup",
+                data: param,
+                async: true,
+                success: function (data) {
+                    debugger;
+                    utils.unLoading();
+                    if (data.responseCode >= 0) {
+                        /*$('#PopupThongBao').modal('hide');*/
+                        bootbox.alert(data.responseDesc);
+                        setTimeout(function () { location.reload(); }, 2500);
+                    }
+                    else {
+                        bootbox.alert(data.responseDesc);
+                    }
+                }
+            });
+        }
+        function DeleteGroup(id) {
+            bootbox.confirm("Bạn muốn xóa nhóm Tài khoản này ?", function (conf) {
+                if (conf == 1) {
+                    utils.Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: UrlRoot + "Home/DeleteGroup",
+                        data: { 'groupId': id },
+                        async: true,
+                        success: function (data) {
+                            utils.unLoading();
+                            if (data.responseCode >= 0) {
+                                $('#PopupThongBao').modal('hide');
+                                bootbox.alert(data.responseDesc);
+                                setTimeout(function () { location.reload(); }, 1500);
+                            }
+                            else {
+                                bootbox.alert(data.responseDesc);
+                            }
+                        }
+                    });
+                }
+                return;
+            });
+        }
+    </script>
+}
+else
+{
+    <h2 style="color:red">ErrorPermission</h2>
+    <h4>Bạn không có quyền truy cập . Xin hãy liên hệ Admin để được cấp quyền vào hệ thống CMS</h4>
+}

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32510.428
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ODIN_CMS", "ODIN_CMS\ODIN_CMS.csproj", "{22619850-9264-458F-9E61-4969A83C3124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{672EBD94-D843-44BF-971D-3B7BA0C22834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{A558F683-7298-4BE6-8C1F-39C08CCAAED4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22619850-9264-458F-9E61-4969A83C3124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22619850-9264-458F-9E61-4969A83C3124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22619850-9264-458F-9E61-4969A83C3124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22619850-9264-458F-9E61-4969A83C3124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{672EBD94-D843-44BF-971D-3B7BA0C22834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{672EBD94-D843-44BF-971D-3B7BA0C22834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{672EBD94-D843-44BF-971D-3B7BA0C22834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{672EBD94-D843-44BF-971D-3B7BA0C22834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A558F683-7298-4BE6-8C1F-39C08CCAAED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A558F683-7298-4BE6-8C1F-39C08CCAAED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A558F683-7298-4BE6-8C1F-39C08CCAAED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A558F683-7298-4BE6-8C1F-39C08CCAAED4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED10D13C-C1FB-4BD9-AB6A-1731D0C648A2}
+	EndGlobalSection
+EndGlobal

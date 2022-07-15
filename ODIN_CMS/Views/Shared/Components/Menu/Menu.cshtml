@@ -1,0 +1,51 @@
+﻿@using DataAccess.Models
+@using ODIN_CMS.Controllers
+
+@model List<GroupFunctions>
+@if (Model != null && Model.Count > 0)
+{
+    var fathers = Model.FindAll(f => f.ParentID == 0);
+    fathers.Sort((f1, f2) => f1.Order.CompareTo(f2.Order));
+
+<ul class="sidebar-menu" data-widget="tree">
+    <li>
+        <a href="@Utils.Config.URL_ROOT">
+            <i class="mdi mdi-database"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    @foreach (var father in fathers)
+    {
+        var listChirl = Model.FindAll(f => f.ParentID == father.FunctionID && f.IsDisplay);
+        listChirl.Sort((f1, f2) => f1.Order.CompareTo(f2.Order));
+        if (listChirl.Count > 0)
+        {
+            <li class="treeview">
+                <a href="#">
+                    <i class="@father.CssIcon"></i>
+                    <span>@father.FunctionName</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    @foreach (var function in listChirl)
+                    {
+                        @Html.Raw(HomeController.GetChildMenu(function, Model))
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="#">
+                    <i class="@father.CssIcon"></i>
+                    <span>@father.FunctionName</span>
+                </a>
+            </li>
+        }
+    }
+</ul>
+
+}
