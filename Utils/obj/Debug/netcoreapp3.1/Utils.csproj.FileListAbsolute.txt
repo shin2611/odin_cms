@@ -1,0 +1,10 @@
+C:\Project\odin_cms\Utils\bin\Debug\netcoreapp3.1\Utils.deps.json
+C:\Project\odin_cms\Utils\bin\Debug\netcoreapp3.1\Utils.dll
+C:\Project\odin_cms\Utils\bin\Debug\netcoreapp3.1\Utils.pdb
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.csproj.AssemblyReference.cache
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.GeneratedMSBuildEditorConfig.editorconfig
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.AssemblyInfoInputs.cache
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.AssemblyInfo.cs
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.csproj.CoreCompileInputs.cache
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.dll
+C:\Project\odin_cms\Utils\obj\Debug\netcoreapp3.1\Utils.pdb

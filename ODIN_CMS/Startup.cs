@@ -121,6 +121,10 @@ namespace ODIN_CMS
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Account}/{action=FormLogin}/{id?}");
+
+                routes.MapRoute(
+                    name: "/them-moi-lop-hoc",
+                    template: "{controller=LevelOfClass}/{action=Index}");
             });
         }
     }

@@ -1,0 +1,13 @@
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.AssemblyReference.cache
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfoInputs.cache
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfo.cs
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.cache
+C:\Project\odin_cms\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.deps.json
+C:\Project\odin_cms\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.dll
+C:\Project\odin_cms\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.pdb
+C:\Project\odin_cms\DataAccess\bin\Debug\netcoreapp3.1\Utils.dll
+C:\Project\odin_cms\DataAccess\bin\Debug\netcoreapp3.1\Utils.pdb
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CopyComplete
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.dll
+C:\Project\odin_cms\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.pdb
