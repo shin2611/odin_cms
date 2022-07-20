@@ -5,4 +5,90 @@
 }
 
 
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
 
+            <h4 class="modal-title" id="myModalLabel33">Thêm mới trình độ </h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="box">
+                <form class="form form-horizontal" id="defaultForm" method="post">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <label for="txtFullname" class="col-sm-2 col-form-label">Trình độ</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="txtLevel" maxlength="100" name="fullname" value="" class="form-control" placeholder="Nhập tên đầy đủ" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtEmail" class="col-sm-2 col-form-label">Mã trình độ</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="txtLevelCode" name="LevelCode" maxlength="150" value="" class="form-control" placeholder="Nhập mã trình độ" data-rule-required="true" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="txtConfirmPass" class="col-sm-2 col-form-label">Trạng thái</label>
+                                    <div class="col-sm-10">
+                                        <div class="checkbox">
+
+                                            <input type="checkbox" id="cbxIsActive" style="opacity:1;left:5px;" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger text-left" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" onclick="SaveData();">Save changes</button>
+                    </div>
+                    <input type="hidden" value="" id="txtTeacherID" />
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    function Insert() {
+
+
+        var file = this.files[0];
+        var form_data = new FormData();
+        form_data.append("file_name", file_data);
+
+        $.ajax({
+            type: 'POST',
+            url: UrlRoot + "Teacher/UploadFileCmnd",
+            data: param,
+            async: true,
+            success: function (data) {
+                debugger;
+                utils.unLoading();
+                if (data.responseCode >= 0) {
+                    $('#PopupThongBao').modal('hide');
+                    bootbox.alert(data.responseDesc);
+                    setTimeout(function () { GetList(); }, 2500);
+                }
+                else {
+                    bootbox.alert(data.responseDesc);
+                }
+            }
+        });
+    }
+
+
+</script>
