@@ -44,5 +44,15 @@ namespace DataAccess.Factory
         {
             return new DashboardDAOImpl();
         }
+
+        public override ILevelOfClassDAO CreateLevelOfClassDAO()
+        {
+            return new LevelOfClassDAOImpl();
+        }
+
+        public override IScheduleDAO CreateScheduleDAO()
+        {
+            return new ScheduleDAOImpl();
+        }
     }
 }

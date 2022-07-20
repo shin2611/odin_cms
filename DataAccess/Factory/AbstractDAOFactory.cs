@@ -30,5 +30,7 @@ namespace DataAccess.Factory
         public abstract ICMS CreateCMSDAO();
         public abstract IWebDAO CreateWEBDAO();
         public abstract IDashboardDAO CreateDashboardDAO();
+        public abstract ILevelOfClassDAO CreateLevelOfClassDAO();
+        public abstract IScheduleDAO CreateScheduleDAO();
     }
 }
