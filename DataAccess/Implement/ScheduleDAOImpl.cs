@@ -24,7 +24,6 @@ namespace DataAccess.Implement
                 pars[4] = new SqlParameter("@Response_Status", SqlDbType.Int) { Direction = ParameterDirection.Output };
                 pars[5] = new SqlParameter("@ResponseMessage", SqlDbType.NVarChar) { Direction = ParameterDirection.Output };
                 new DBHelper(Config.ConnectionString.SQLConnCMS).ExecuteNonQuerySP("Sp_Schedule_InsertUpdate", pars);
-
                 res.Status = Convert.ToInt32(pars[4].Value);
                 res.Message = pars[5].Value.ToString();
 
@@ -38,6 +37,8 @@ namespace DataAccess.Implement
                     param[3] = new SqlParameter("@Response_Status", SqlDbType.Int) { Direction = ParameterDirection.Output };
                     param[4] = new SqlParameter("@ResponseMessage", SqlDbType.NVarChar) { Direction = ParameterDirection.Output };
                     new DBHelper(Config.ConnectionString.SQLConnCMS).ExecuteNonQuerySP("Sp_ScheduleDay_InsertUpdate", pars);
+                    res.Status = Convert.ToInt32(pars[3].Value);
+                    res.Message = pars[4].Value.ToString();
                 }
 
                 return res;

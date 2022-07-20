@@ -16,7 +16,7 @@ namespace DataAccess.Implement
             ResponseStatus res = new ResponseStatus();
             try
             {
-                var pars = new SqlParameter[2];
+                var pars = new SqlParameter[6];
                 pars[0] = new SqlParameter("@Id", levelOfClass.Id);
                 pars[1] = new SqlParameter("@Name", levelOfClass.Name);
                 pars[2] = new SqlParameter("@Code", levelOfClass.Code);
